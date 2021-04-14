@@ -9,6 +9,8 @@ import { LambdaIntegration, RestApi } from "@aws-cdk/aws-apigateway";
 export interface BackendStackProps extends cdk.StackProps {}
 
 export class BackendStack extends cdk.Stack {
+  public api: RestApi;
+
   constructor(scope: cdk.Construct, id: string, props: BackendStackProps) {
     super(scope, id, props);
 
@@ -22,8 +24,8 @@ export class BackendStack extends cdk.Stack {
     });
 
     const integration = new LambdaIntegration(lambdaToDynamoDB.lambdaFunction);
-    const api = new RestApi(this, 'FeedbackAPI', {});
-    api.root.addResource('feedback')
+    this.api = new RestApi(this, 'FeedbackAPI', {});
+    this.api.root.addResource('feedback')
       .addMethod('POST', integration);
   }
 }
